@@ -4,16 +4,34 @@ import styled from 'styled-components'
 import Month from './components/month'
 
 
-const Button = styled.div`
+const ButtonTop = styled.div`
   height: 50px;
-  width: 100%;
+  width: 490px;
   cursor: pointer;
-  background: rgba(0,0,0,0.1);
+  background: lightgray;
   padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 140px;
+  position: fixed;
+  z-index: 0;
+  transition: 0.6s;
+  top: ${props => props.visible ? '120px' : '-120px'}
+`
+
+const ButtonBottom = styled.div`
+  height: 50px;
+  width: 490px;
+  cursor: pointer;
+  background: lightgray;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 0;
+  transition: 0.6s;
+  bottom: ${props => props.visible ? '80px' : '-80px'}
 `
 
 const DayRow = styled.div`
@@ -36,7 +54,10 @@ const SingleDay = styled.div`
 class App extends Component {
 
   state = {
-    year: parseInt(new Date().toISOString().slice(0,4))
+    year: parseInt(new Date().toISOString().slice(0,4)),
+    topVisible: true,
+    bottomVisible: false,
+    position: '',
   }
 
 
@@ -81,9 +102,23 @@ class App extends Component {
 
   }
 
+  componentDidMount() {
+    document.addEventListener('scroll', () => {
+      const topVisible = window.scrollY < 625
+      const bottomVisible = window.scrollY > 2500
+      if (topVisible !== this.state.topVisible) {
+          this.setState({ topVisible })
+      }
+      if (bottomVisible !== this.state.bottomVisible) {
+          this.setState({ bottomVisible })
+      }
+    });
+  }
 
 
   render() {
+
+    console.log(this.state.topVisible, this.state.bottomVisible)
 
     const months = [0,1,2,3,4,5,6,7,8,9,10,11]
     const daysOfYear = this.getDates(new Date(`${this.state.year}-01-01`), new Date(`${this.state.year}-12-31`))
@@ -126,6 +161,11 @@ class App extends Component {
 
       <div className="main">
 
+        <ButtonTop
+          onClick={() => this.setState({year: this.state.year - 1})}
+          visible={this.state.topVisible}
+        >{this.state.year - 1}</ButtonTop>
+
 
         <div>
           <DayRow>
@@ -140,31 +180,32 @@ class App extends Component {
 
 
           <div>
-            <Button
-              onClick={() => this.setState({year: this.state.year - 1})}
-              visible={this.state.topVisible}
-            >{this.state.year - 1}</Button>
 
-              {
-                months.map(month =>
-                  <div style={{marginBottom: "35px"}} key={month}>
-                    <Month
-                      monthName={this.renderMonthName(month)}
-                      daysOfMonth={Object.keys(calendarDays).filter(day => new Date(day).getMonth() === month)}
-                      calendarDays={calendarDays}
-                      year={this.state.year}
-                    />
-                  </div>
-                )
-              }
 
-            <Button
-              onClick={() => this.setState({year: this.state.year + 1})}
-              visible={this.state.bottomVisible}
-            >{this.state.year + 1}</Button>
+            <div style={{marginTop: '220px'}}>
+                {
+                  months.map(month =>
+                    <div style={{marginBottom: "35px"}} key={month}>
+                      <Month
+                        monthName={this.renderMonthName(month)}
+                        daysOfMonth={Object.keys(calendarDays).filter(day => new Date(day).getMonth() === month)}
+                        calendarDays={calendarDays}
+                        year={this.state.year}
+                      />
+                    </div>
+                  )
+                }
+              </div>
+
+
 
           </div>
         </div>
+
+        <ButtonBottom
+          onClick={() => this.setState({year: this.state.year + 1})}
+          visible={this.state.bottomVisible}
+        >{this.state.year + 1}</ButtonBottom>
 
 
       </div>

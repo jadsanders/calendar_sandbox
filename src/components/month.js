@@ -93,42 +93,48 @@ const renderColor = (data) => {
   }
 }
 
-const Month = (props) => {
-
-  const days = props.daysOfMonth.reduce((obj, key) => {obj[key] = props.calendarDays[key]; return obj;}, {})
-
-  return(
-    <div>
-      <HeaderRow>
-        <h2>{props.monthName} {props.year}</h2>
-      </HeaderRow>
 
 
-      <Row>
-        <Placeholder width={renderWidth(new Date(props.daysOfMonth[0]))}/>
+class Month extends React.Component {
+  render() {
 
-        {
-          Object.values(days).map(day =>
+    const days = this.props.daysOfMonth.reduce((obj, key) => {obj[key] = this.props.calendarDays[key]; return obj;}, {})
 
-            <div key={day.day}>
-              <Day>
-
-                <Indicator style={renderColor({planned: day.planned, completed: day.completed, day: day.day})}>
-                  {new Date(day.day).getDate()}
-                </Indicator>
-
-              </Day>
-            </div>
-          )
-        }
+        return(
+          <div>
+            <HeaderRow>
+              <h2>{this.props.monthName} {this.props.year}</h2>
+            </HeaderRow>
 
 
-      </Row>
+            <Row>
+              <Placeholder width={renderWidth(new Date(this.props.daysOfMonth[0]))}/>
+
+              {
+                Object.values(days).map(day =>
+
+                  <div key={day.day}>
+                    <Day>
+
+                      <Indicator style={renderColor({planned: day.planned, completed: day.completed, day: day.day})}>
+                        {new Date(day.day).getDate()}
+                      </Indicator>
+
+                    </Day>
+                  </div>
+                )
+              }
+
+
+            </Row>
 
 
 
-    </div>
-  )
+          </div>
+        )
+
+  }
 }
+
 
 export default Month;

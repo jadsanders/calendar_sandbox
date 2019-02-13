@@ -15,7 +15,7 @@ const ButtonTop = styled.div`
   align-items: center;
   position: fixed;
   z-index: 0;
-  transition: 0.6s;
+  transition: 0.9s;
   top: ${props => props.visible ? '120px' : '-120px'}
 `
 
@@ -60,6 +60,8 @@ class App extends Component {
     position: '',
   }
 
+  refsCollection = {};
+
 
   getDates(start, end) {
       for(var arr=[],dt=start; dt<=end; dt.setDate(dt.getDate()+1)){
@@ -102,23 +104,36 @@ class App extends Component {
 
   }
 
+
+  handleNavigation = (e) =>{
+    const window = e.currentTarget;
+
+    if(this.prev > window.scrollY){
+
+      this.state.topVisible === false &&
+        this.setState({ topVisible: true, bottomVisible: false });
+    }
+    else if(this.prev < window.scrollY){
+      this.state.topVisible === true &&
+        this.setState({ topVisible: false, bottomVisible: true });
+    }
+    this.prev = window.scrollY;
+  };
+
   componentDidMount() {
-    document.addEventListener('scroll', () => {
-      const topVisible = window.scrollY < 625
-      const bottomVisible = window.scrollY > 2500
-      if (topVisible !== this.state.topVisible) {
-          this.setState({ topVisible })
-      }
-      if (bottomVisible !== this.state.bottomVisible) {
-          this.setState({ bottomVisible })
-      }
-    });
+    this.prev = window.scrollY
+    window.addEventListener('scroll', e => this.handleNavigation(e))
+
+
+
+      const currentMonth = new Date().getMonth()
+      console.log(this.refsCollection)
+      console.log(currentMonth)
+
   }
 
 
   render() {
-
-    console.log(this.state.topVisible, this.state.bottomVisible)
 
     const months = [0,1,2,3,4,5,6,7,8,9,10,11]
     const daysOfYear = this.getDates(new Date(`${this.state.year}-01-01`), new Date(`${this.state.year}-12-31`))
@@ -191,6 +206,7 @@ class App extends Component {
                         daysOfMonth={Object.keys(calendarDays).filter(day => new Date(day).getMonth() === month)}
                         calendarDays={calendarDays}
                         year={this.state.year}
+                        ref={(instance) => this.refsCollection[month] = instance}
                       />
                     </div>
                   )

@@ -3,7 +3,6 @@ import styled from 'styled-components'
 
 const HeaderRow = styled.div`
   border-bottom: 1px solid #E3EAF5;
-  margin-top: 70px;
 `
 
 const Row = styled.div`
@@ -15,7 +14,7 @@ const Row = styled.div`
 const Day = styled.div`
   width: 70px;
   height: 70px;
-  border-bottom: 1px solid #E3EAF5;
+  //border-bottom: 1px solid #E3EAF5;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -34,7 +33,6 @@ const Indicator = styled.div`
 const Placeholder = styled.div`
   height: 70px;
   width: ${props => props.width};
-  transition: 0.3s
 `
 
 

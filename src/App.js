@@ -4,42 +4,26 @@ import styled from 'styled-components'
 import Month from './components/month'
 
 
-const ButtonTop = styled.div`
-  height: 50px;
-  width: 490px;
-  cursor: pointer;
-  background: lightgray;
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  z-index: 0;
-  transition: 0.9s;
-  top: ${props => props.visible ? '120px' : '-120px'}
-`
-
-const ButtonBottom = styled.div`
-  height: 50px;
-  width: 490px;
-  cursor: pointer;
-  background: lightgray;
-  padding: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  z-index: 0;
-  transition: 0.6s;
-  bottom: ${props => props.visible ? '80px' : '-80px'}
-`
-
 const DayRow = styled.div`
   height: 70px;
   display: flex;
   position: fixed;
   background: #fff;
   border-bottom: 1px solid #E3EAF5;
+`
+
+const ButtonRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 50px;
+`
+
+const YearButton = styled.div`
+  color: grey;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
 `
 
 const SingleDay = styled.div`
@@ -60,6 +44,7 @@ class App extends Component {
     position: '',
   }
 
+
   refsCollection = {};
 
 
@@ -69,7 +54,6 @@ class App extends Component {
       }
       return arr;
   };
-
 
 
   renderMonthName(month) {
@@ -176,12 +160,6 @@ class App extends Component {
 
       <div className="main">
 
-        <ButtonTop
-          onClick={() => this.setState({year: this.state.year - 1})}
-          visible={this.state.topVisible}
-        >{this.state.year - 1}</ButtonTop>
-
-
         <div>
           <DayRow>
             <SingleDay>Mo</SingleDay>
@@ -194,13 +172,17 @@ class App extends Component {
           </DayRow>
 
 
-          <div>
+          <div style={{paddingTop: '120px'}}>
 
+            <ButtonRow>
+              <YearButton onClick={() => this.setState({year: this.state.year - 1})}>{this.state.year - 1}</YearButton>
+              <YearButton onClick={() => this.setState({year: this.state.year + 1})}>{this.state.year + 1}</YearButton>
+            </ButtonRow>
 
-            <div style={{marginTop: '220px'}}>
+            <div>
                 {
                   months.map(month =>
-                    <div style={{marginBottom: "35px"}} key={month}>
+                    <div style={{marginBottom: "70px"}} key={month}>
                       <Month
                         monthName={this.renderMonthName(month)}
                         daysOfMonth={Object.keys(calendarDays).filter(day => new Date(day).getMonth() === month)}
@@ -213,17 +195,13 @@ class App extends Component {
                 }
               </div>
 
-
+            <ButtonRow>
+              <YearButton onClick={() => this.setState({year: this.state.year - 1})}>{this.state.year - 1}</YearButton>
+              <YearButton onClick={() => this.setState({year: this.state.year + 1})}>{this.state.year + 1}</YearButton>
+            </ButtonRow>
 
           </div>
         </div>
-
-        <ButtonBottom
-          onClick={() => this.setState({year: this.state.year + 1})}
-          visible={this.state.bottomVisible}
-        >{this.state.year + 1}</ButtonBottom>
-
-
       </div>
     );
   }
